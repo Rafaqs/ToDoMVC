@@ -74,6 +74,25 @@ namespace ToDoMVC.Controllers
             return View(todo);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AJAXCreate([Bind(Include = "Id,Descricao")] Todo todo)
+        {
+            if (ModelState.IsValid)
+            {
+                string currentUserId = User.Identity.GetUserId();
+                ApplicationUser currentUser = db.Users.FirstOrDefault(x => x.Id == currentUserId);
+                todo.User = currentUser;
+                todo.Concluido = false;
+                db.ToDos.Add(todo);
+                db.SaveChanges();
+                
+            }
+
+            return PartialView("_ToDoTable", GetMyToDoes());
+        }
+
+
         // GET: Todoes/Edit/5
         public ActionResult Edit(int? id)
         {

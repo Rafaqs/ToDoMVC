@@ -1,18 +1,29 @@
-﻿@model IEnumerable<ToDoMVC.Models.Todo>
+﻿@model ToDoMVC.Models.Todo
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
 <div id="tableDiv"></div>
-
+<div id="todoCreateFrom">
+    @using (Ajax.BeginForm("AJAXCreate", "Todoes", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        UpdateTargetId = "tableDiv"
+    }))
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            <div>
+                @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Descricao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+</div>
 @section Scripts{
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/Custom_Scripts/BuildTable.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
     }
