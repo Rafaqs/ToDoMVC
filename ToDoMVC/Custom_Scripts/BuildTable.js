@@ -4,7 +4,6 @@
         url: '/Todoes/BuildToDoTable',
         success: function (result) {
             $('#tableDiv').html(result);
-        
         }
     });
 });
